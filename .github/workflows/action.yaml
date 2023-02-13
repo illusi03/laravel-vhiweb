@@ -1,0 +1,21 @@
+name: remote ssh command
+on: [push]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.GASIK_HOST }}
+        username: ${{ secrets.GASIK_USERNAME }}
+        password: ${{ secrets.GASIK_PASSWORD }}
+        port: ${{ secrets.GASIK_PORT }}
+        script: |
+          whoami
+          cd /home/admin/web/api-traceability.gasik.id/public_html
+          git pull origin master
+          ${{ secrets.GIT_USER }}
+          ${{ secrets.GIT_PASSWORD }}
