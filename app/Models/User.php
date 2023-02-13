@@ -25,8 +25,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\VerifyEmailNotification;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, HasMedia
 {
     use HasFactory;
     use Notifiable;
@@ -39,6 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasJsonRelationships;
     use SearchableTrait;
     use MustVerifyEmailTrait;
+    use InteractsWithMedia;
 
     // Logging System
     protected static $logName = 'user';
@@ -107,6 +112,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function scopeFindByEmail($query, $email)
     {
         return $query->whereEmail($email);
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('preview')
+            ->fit(Manipulations::FIT_CROP, 300, 300)
+            ->nonQueued();
     }
 
     public static function getRoles($id)
