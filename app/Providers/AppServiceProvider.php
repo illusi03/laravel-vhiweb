@@ -6,6 +6,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
+use Laravel\Passport\Console\ClientCommand;
+use Laravel\Passport\Console\InstallCommand;
+use Laravel\Passport\Console\KeysCommand;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,7 +39,8 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    private function setDefaultTimezoneCarbon(){
+    private function setDefaultTimezoneCarbon()
+    {
         $configTimezone = config('app.timezone');
         date_default_timezone_set($configTimezone);
     }
@@ -62,5 +66,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->searchableEloquent();
         $this->setDefaultTimezoneCarbon();
+
+        // TODOS : (For Hosting)
+        $this->commands([
+            InstallCommand::class,
+            ClientCommand::class,
+            KeysCommand::class,
+        ]);
     }
 }
