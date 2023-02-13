@@ -6,22 +6,18 @@ use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterService extends BaseCurrentService
 {
-    private function executeSave($value)
-    {
-        return [
-            'user' => null
-        ];
-    }
-
     public function run()
     {
         $dirtyValue = request()->all();
+        $purePass = Arr::get($dirtyValue, 'password');
+        $hashedPass = Hash::make($purePass);
         $user = User::create([
             'email' => Arr::get($dirtyValue, 'email'),
-            'password' => Arr::get($dirtyValue, 'password'),
+            'password' => $hashedPass,
             'name' => Arr::get($dirtyValue, 'name'),
         ]);
         $user->sendEmailVerificationNotification();
