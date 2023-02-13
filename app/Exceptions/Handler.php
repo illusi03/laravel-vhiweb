@@ -66,27 +66,31 @@ class Handler extends ExceptionHandler
         if ($exception instanceof NotFoundHttpException) {
             return response()->json([
                 'status' => 'error',
-                'data' => 'url not found',
+                'message' => 'url not found',
+                'data' => null,
             ], 400);
         }
         // Method Not Found
         if ($exception instanceof MethodNotAllowedHttpException) {
             return response()->json([
                 'status' => 'error',
-                'data' => 'method not found or please check http / https',
+                'message' => 'method not found or please check http / https',
+                'data' => null,
             ], 400);
         }
         // Model Not found
         if ($exception instanceof ModelNotFoundException) {
             return response()->json([
-                'status' => 'success',
-                'data' => (object) [],
+                'status' => 'error',
+                'message' => 'data has not found',
+                'data' => null,
             ], 400);
         }
         // Exception SQL
         if ($exception instanceof QueryException) {
             return response()->json([
                 'status' => 'error',
+                'message' => 'error',
                 'data' => $exception->errorInfo[2],
             ], 400);
         }
@@ -94,7 +98,8 @@ class Handler extends ExceptionHandler
         if ($exception instanceof UnauthorizedException) {
             return response()->json([
                 'status' => 'error',
-                'data' => 'not authorize permissions',
+                'message' => 'not authorize permissions',
+                'data' => null,
             ], 401);
         }
         // SPATIE Exception
@@ -102,6 +107,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof InvalidFieldQuery) {
             return response()->json([
                 'status' => 'error',
+                'message' => 'invalid query params',
                 'data' => [
                     'message' => $exception->getMessage(),
                     'accept_values' => $exception->allowedFields,
@@ -111,6 +117,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof InvalidSortQuery) {
             return response()->json([
                 'status' => 'error',
+                'message' => 'invalid query params',
                 'data' => [
                     'message' => $exception->getMessage(),
                     'accept_values' => $exception->allowedSorts,
@@ -120,6 +127,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof InvalidIncludeQuery) {
             return response()->json([
                 'status' => 'error',
+                'message' => 'invalid query params',
                 'data' => [
                     'message' => $exception->getMessage(),
                     'accept_values' => $exception->allowedIncludes,
@@ -129,6 +137,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof InvalidFilterQuery) {
             return response()->json([
                 'status' => 'error',
+                'message' => 'invalid query params',
                 'data' => [
                     'message' => $exception->getMessage(),
                     'accept_values' => $exception->allowedFilters,
@@ -143,6 +152,7 @@ class Handler extends ExceptionHandler
             }, $tmpErrors);
             return response()->json([
                 'status' => 'error',
+                'message' => 'error',
                 'data' => [
                     'message' => $tmpErrors,
                 ],
@@ -152,7 +162,8 @@ class Handler extends ExceptionHandler
         if ($exception instanceof HttpException) {
             return response()->json([
                 'status' => 'error',
-                'data' => 'email has not verified or something went wrong on request',
+                'message' => $exception->getMessage(),
+                'data' => null,
             ], 400);
         }
 
@@ -164,7 +175,8 @@ class Handler extends ExceptionHandler
         // Unauthenticated
         return response()->json([
             'status' => 'error',
-            'data' => 'token not found / expired',
+            'message' => 'token not found / expired',
+            'data' => null,
         ], 401);
     }
 
@@ -186,6 +198,7 @@ class Handler extends ExceptionHandler
         // Fields Not Complete (VALIDATION)
         return response()->json([
             'status' => 'error',
+            'message' => 'invalid value',
             'data' => $this->transformErrors($exception),
         ], $exception->status);
     }
