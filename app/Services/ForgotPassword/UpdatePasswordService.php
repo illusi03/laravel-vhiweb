@@ -27,7 +27,7 @@ class UpdatePasswordService extends BaseCurrentService
             }
         );
         if ($status == Password::PASSWORD_RESET) {
-            return $this->showResponse('success reset password, please login with use new password !');
+            return $this->showResponse(null, 'success reset password, please login with use new password !');
         } else {
             return $this->showResponseError('reset token has expired / not match');
         }

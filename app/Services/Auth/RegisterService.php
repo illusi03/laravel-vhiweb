@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -18,22 +19,12 @@ class RegisterService extends BaseCurrentService
     public function run()
     {
         $dirtyValue = request()->all();
-        DB::beginTransaction();
-        try {
-            $resultExecute = $this->executeSave($dirtyValue);
-            
-            $user = Arr::get($resultExecute, 'user');
-            $userId = $user->id;
-            $isAttempted = Auth::loginUsingId($userId, true);
-            if ($isAttempted) {
-                DB::commit();
-                return $this->attemptedResponseCustom();
-            } else {
-                throw new Exception("Cannot get token and attempt user", 1);
-            }
-        }  catch (Exception $e) {
-            DB::rollBack();
-            return $this->showResponseServerError($e->getMessage());
-        }
+        $user = User::create([
+            'email' => Arr::get($dirtyValue, 'email'),
+            'password' => Arr::get($dirtyValue, 'password'),
+            'name' => Arr::get($dirtyValue, 'name'),
+        ]);
+        $user->sendEmailVerificationNotification();
+        return $this->showResponse($user, 'email verification link sent on your email, please check your email and verify');
     }
 }

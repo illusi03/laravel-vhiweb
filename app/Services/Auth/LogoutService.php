@@ -14,8 +14,6 @@ class LogoutService extends BaseCurrentService
     {
         $tmpUser = User::getCurrent();
         $cookie = $this->clearToken();
-        return $this->showResponse([
-            'user' => $tmpUser,
-        ])->withCookie($cookie);
+        return $this->showResponse($tmpUser)->withCookie($cookie);
     }
 }

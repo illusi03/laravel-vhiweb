@@ -14,6 +14,7 @@ class DefaultService extends BaseCurrentService
 {
     public function run()
     {
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
         $roleName = request()->post('name');
         $role = Role::where('name', $roleName)->first();
         if (!$role) {

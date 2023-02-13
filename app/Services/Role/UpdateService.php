@@ -14,6 +14,7 @@ class UpdateService extends BaseCurrentService
 {
     public function run($roleName)
     {
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
         if ($roleName === 'superadmin') return $this->showResponseError('cannot mutate superadmin role');
         $role = Role::where('name', $roleName)->first();
         if (!$role) return $this->showResponseError('role name has not found');

@@ -24,6 +24,7 @@ use App\Models\MainTransaction;
 */
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
 Route::post('forgot_password', [ForgotPasswordController::class, 'forgotPassword']);
 Route::post('update_password', [ForgotPasswordController::class, 'updatePassword']);
 Route::get('verification_email/resend/{id}', [VerificationEmailController::class, 'resend'])
@@ -34,14 +35,12 @@ Route::get('verification_email/verify/{id}/{hash}', [VerificationEmailController
 Route::middleware(['auth.httponly', 'verified'])->group(function () {
     // Authentication
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('profile', [AuthController::class, 'profile']);
     // Users
-    Route::post('users/update_password_self', [UserController::class, 'updatePasswordSelf']);
+    Route::get('users/profile', [AuthController::class, 'profile']);
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('users/update_password', [UserController::class, 'updatePasswordSelf']);
     // Permissions And Roles
     Route::get('permissions', [PermissionController::class, 'index']);
     Route::apiResource('roles', RoleController::class);
     Route::post('roles_default', [RoleController::class, 'default']);
-
-    // Users
-    Route::get('users', [UserController::class, 'index']);
 });

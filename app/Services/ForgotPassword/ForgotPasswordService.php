@@ -20,7 +20,7 @@ class ForgotPasswordService extends BaseCurrentService
         $response = Password::sendResetLink(['email' => $reqEmail]);
         switch ($response) {
             case Password::RESET_LINK_SENT:
-                return $this->showResponse('a reset link has been sent to your email address.');
+                return $this->showResponse(null, 'a reset link has been sent to your email address.');
             case Password::INVALID_USER:
                 return $this->showResponseError('invalid email');
             default:

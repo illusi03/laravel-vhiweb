@@ -36,27 +36,31 @@ class BaseService
         return $resultQB;
     }
 
-    protected function showResponse($data, $isFail = false)
+    protected function showResponse($data, $message = null)
     {
-        $status = $isFail ? 'error' : 'success';
-        $code = $isFail ? 400 : 200;
         return response()->json([
-            'status' => $status,
+            'status' => 'success',
+            'message' => $message ?? 'success',
             'data' => $data,
-        ], $code);
+        ], 200);
     }
 
-    protected function showResponseUnauth()
+    protected function showResponseUnauth($message = null)
     {
         return response()->json([
             'status' => 'error',
+            'message' => $message,
             'data' => 'not authorize permissions',
         ], 401);
     }
 
     protected function showResponseNotFound()
     {
-        return $this->showResponse('data not found', true);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'data not found',
+            'data' => 'data not found',
+        ], 400);
     }
 
     protected function showResponseError($message)
@@ -64,6 +68,7 @@ class BaseService
         $code = 400;
         return response()->json([
             'status' => 'error',
+            'message' => 'client error',
             'data' => $message,
         ], $code);
     }
@@ -73,6 +78,7 @@ class BaseService
         $code = 500;
         return response()->json([
             'status' => 'error',
+            'message' => 'server error',
             'data' => $message,
         ], $code);
     }
@@ -82,6 +88,7 @@ class BaseService
         $code = 500;
         return response()->json([
             'status' => 'error',
+            'message' => 'maintenance',
             'data' => 'this endpoint is being fixed !',
         ], $code);
     }
@@ -92,6 +99,7 @@ class BaseService
         $message = "failed to mutate data, rollback transaction (err : $msg)";
         return response()->json([
             'status' => 'error',
+            'message' => 'failed mutate data',
             'data' => $message,
         ], $code);
     }
@@ -101,6 +109,7 @@ class BaseService
         $resultQueryBuilder = $this->setQueryBuilder($myQuery, $columnSorts, $columnFilters, $columnFiltersExact);
         $res = [
             'status' => 'success',
+            'message' => 'success get data',
             'data' => $resultQueryBuilder->items(),
             'pagination' => [
                 'current_page' => (int) $resultQueryBuilder->currentPage(),
@@ -137,29 +146,8 @@ class BaseService
             $headers = array(
                 'Content-Type: ' . mime_content_type($file),
             );
-            if (!$file) return $this->showResponse('data not found', true);
+            if (!$file) return $this->showResponseError('data not found');
             return response()->download($file, $fileName, $headers);
         }
-    }
-
-    private function setNormalResult($status, $type = null, $data = null, $errorMsg = null)
-    {
-        return [
-            'status' => $status,
-            'data' => $data,
-            'type_error' => $type,
-            'error_message' => $errorMsg
-        ];
-    }
-
-    public function setSuccessResult($data = null)
-    {
-        return $this->setNormalResult('success', null, $data);
-    }
-
-    public function setErrorResult($type = null, $errorMsg = null)
-    {
-        $data = null;
-        return $this->setNormalResult('error', $type, $data, $errorMsg);
     }
 }

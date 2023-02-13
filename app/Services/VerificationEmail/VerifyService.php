@@ -15,9 +15,6 @@ class VerifyService extends BaseCurrentService
         if (!$user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
         }
-        return $this->showResponse([
-            'message' => 'succes verify email, please login with current email',
-            'data' => $user,
-        ]);
+        return $this->showResponse($user);
     }
 }

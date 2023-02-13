@@ -22,10 +22,23 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\VerifyEmailNotification;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens, HasRoles, Notifiable, LogsActivity, SoftDeletes, SoftCascadeTrait, HasJsonRelationships, SearchableTrait;
+    use HasFactory;
+    use Notifiable;
+    use HasApiTokens;
+    use HasRoles;
+    use Notifiable;
+    use LogsActivity;
+    use SoftDeletes;
+    use SoftCascadeTrait;
+    use HasJsonRelationships;
+    use SearchableTrait;
+    use MustVerifyEmailTrait;
 
     // Logging System
     protected static $logName = 'user';
@@ -86,17 +99,16 @@ class User extends Authenticatable
         $this->notify(new PasswordReset($token, $this->email));
     }
 
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmailNotification);
+    }
+
     public function scopeFindByEmail($query, $email)
     {
         return $query->whereEmail($email);
     }
 
-    // -- Relations --
-
-    // -- Scopes --
-
-
-    // -- Builder Function --
     public static function getRoles($id)
     {
         $tmpRoles = User::find($id)->roles;
@@ -157,21 +169,5 @@ class User extends Authenticatable
         $user->password = $newHashedPassword;
         $user->save();
         return $user;
-    }
-
-    public function stakeholder()
-    {
-        return $this->hasOne(Stakeholder::class);
-    }
-
-    public function scopeStakeholderCreatedAtBetween(Builder $query, $from, $to): Builder
-    {
-        $from = $from . ' 00:00:00';
-        $to = $to . ' 23:59:59';
-        return $query->with([
-            'stakeholder',
-        ])->whereHas('stakeholder', function ($qStakeholder) use ($from, $to) {
-            $qStakeholder->whereBetween(DB::raw('created_at'), [$from, $to]);
-        });
     }
 }

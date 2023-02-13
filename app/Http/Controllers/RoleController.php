@@ -51,9 +51,9 @@ class RoleController extends Controller
         return $this->indexService->run();
     }
 
-    public function show()
+    public function show($roleName)
     {
-        return $this->showService->run();
+        return $this->showService->run($roleName);
     }
 
     public function update($roleName)

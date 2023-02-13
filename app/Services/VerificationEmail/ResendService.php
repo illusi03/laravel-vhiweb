@@ -15,9 +15,6 @@ class ResendService extends BaseCurrentService
             return $this->showResponseError('email already verified');
         }
         $user->sendEmailVerificationNotification();
-        return $this->showResponse([
-            'message' => 'email verification link sent on your email, please check your email and verify',
-            'data' => $user,
-        ]);
+        return $this->showResponse($user,  'email verification link sent on your email, please check your email and verify');
     }
 }

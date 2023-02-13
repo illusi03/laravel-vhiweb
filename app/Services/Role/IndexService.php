@@ -31,6 +31,6 @@ class IndexService extends BaseCurrentService
             ];
             return $returnNya;
         });
-        return $this->roleResponse($roles);
+        return $this->showResponse($roles);
     }
 }

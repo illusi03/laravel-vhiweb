@@ -12,11 +12,10 @@ use Spatie\Permission\PermissionRegistrar;
 
 class ShowService extends BaseCurrentService
 {
-    public function run()
+    public function run($roleName)
     {
-        $roleName = request()->get('name');
         if (!Role::where('name', $roleName)->exists()) {
-            return $this->showResponse([]);
+            return $this->showResponseNotFound();
         }
         $permissions = $permissions = $this->getPermissionsFromRole($roleName);
         $role = Role::where('name', '=', $roleName)->firstOrFail();

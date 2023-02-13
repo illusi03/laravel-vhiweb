@@ -25,10 +25,4 @@ class BaseCurrentService extends BaseService
         });
         return $permissions;
     }
-
-    protected function roleResponse($role, $isFail = false)
-    {
-        app(PermissionRegistrar::class)->forgetCachedPermissions();
-        return $this->showResponse($role, $isFail);
-    }
 }

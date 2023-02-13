@@ -14,6 +14,7 @@ class StoreService extends BaseCurrentService
 {
     public function run()
     {
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
         $roleName = request()->name;
         $role = Role::create(['name' => $roleName]);
         if (request()->permissions) {
@@ -21,6 +22,6 @@ class StoreService extends BaseCurrentService
                 $role->givePermissionTo($permission);
             }
         }
-        return $this->roleResponse($role);
+        return $this->showResponse($role);
     }
 }

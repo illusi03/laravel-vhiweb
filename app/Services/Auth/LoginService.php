@@ -10,20 +10,6 @@ use Illuminate\Support\Facades\Cookie;
 
 class LoginService extends BaseCurrentService
 {
-    private function checkHasVerified()
-    {
-        $hasVerified = auth()->user()->hasVerifiedEmail();
-        if (!$hasVerified) {
-            $res = $this->showResponseError('please verify email first');
-            $hasUserToken = request()->user()->token();
-            if ($hasUserToken) {
-                $cookie = $this->clearToken();
-                $res->withCookie($cookie);
-            }
-            return $res;
-        }
-    }
-
     public function run()
     {
         $credentials = [
@@ -37,6 +23,16 @@ class LoginService extends BaseCurrentService
         $isLogin = Auth::attempt($attempCredentials);
         if (!$isLogin) {
             return $this->showResponseError('email and password has not match');
+        }
+        $hasVerified = auth()->user()->hasVerifiedEmail();
+        if (!$hasVerified) {
+            $res = $this->showResponseError('please verify email first');
+            $hasUserToken = request()->user()->token();
+            if ($hasUserToken) {
+                $cookie = $this->clearToken();
+                $res->withCookie($cookie);
+            }
+            return $res;
         }
         return $this->attemptedResponse();
     }
