@@ -5,12 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\CooperationController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\MainTransactionController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\VerificationEmailController;
-use App\Models\MainTransaction;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +41,14 @@ Route::middleware(['auth.httponly', 'verified'])->group(function () {
     Route::get('permissions', [PermissionController::class, 'index']);
     Route::apiResource('roles', RoleController::class);
     Route::post('roles_default', [RoleController::class, 'default']);
+    // Photos
+    Route::post('photos', [PhotoController::class, 'store']);
+    Route::put('photos/{id}', [PhotoController::class, 'update']);
+    Route::delete('photos/{id}', [PhotoController::class, 'delete']);
+    Route::post('photos/{id}/like', [PhotoController::class, 'like']);
+    Route::post('photos/{id}/unlike', [PhotoController::class, 'unlike']);
 });
+
+// Public 
+// Photos
+Route::get('photos', [PhotoController::class, 'index']);
