@@ -52,3 +52,4 @@ Route::middleware(['auth.httponly', 'verified'])->group(function () {
 // Public 
 // Photos
 Route::get('photos', [PhotoController::class, 'index']);
+Route::get('photos/{id}', [PhotoController::class, 'show']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Photo\ShowService;
 use App\Services\Photo\IndexService;
 use App\Services\Photo\StoreService;
 use App\Services\Photo\UpdateService;
@@ -12,6 +13,7 @@ use App\Services\Photo\UnlikeService;
 class PhotoController extends Controller
 {
     private $indexService;
+    private $showService;
     private $storeService;
     private $updateService;
     private $deleteService;
@@ -20,6 +22,7 @@ class PhotoController extends Controller
 
     function __construct(
         IndexService $indexService,
+        ShowService $showService,
         StoreService $storeService,
         UpdateService $updateService,
         DeleteService $deleteService,
@@ -27,6 +30,7 @@ class PhotoController extends Controller
         UnlikeService $unlikeService
     ) {
         $this->indexService = $indexService;
+        $this->showService = $showService;
         $this->storeService = $storeService;
         $this->updateService = $updateService;
         $this->deleteService = $deleteService;
@@ -37,6 +41,11 @@ class PhotoController extends Controller
     public function index()
     {
         return $this->indexService->run();
+    }
+
+    public function show($id)
+    {
+        return $this->showService->run($id);
     }
 
     public function store()
