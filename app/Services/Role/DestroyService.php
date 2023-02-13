@@ -23,7 +23,7 @@ class DestroyService extends BaseCurrentService
         if (in_array($name, $currentRoles)) {
             return $this->roleResponse('cannot delete current role', true);
         }
-        $setting = Setting::whereKeyColumn('defaultRole')->first();
+        $setting = Setting::whereKeyColumn('default_role')->first();
         $defaultRole = Arr::get($setting, 'value_column');
         if ($name == $defaultRole) {
             return $this->roleResponse('cannot delete default role', true);

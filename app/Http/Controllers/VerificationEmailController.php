@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\VerificationEmail\ResendService;
 use App\Services\VerificationEmail\VerifyService;
-use Illuminate\Foundation\Auth\EmailVerificationRequest as BaseEmailVerificationRequest;
 
 class VerificationEmailController extends Controller
 {

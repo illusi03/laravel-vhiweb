@@ -19,7 +19,7 @@ class IndexService extends BaseCurrentService
             $updated_at = $obj->updated_at->format('Y-m-d H:i:s');
             $permissions = $this->getPermissionsFromRole($obj->name);
             $isDefault = false;
-            $setting = Setting::whereKeyColumn('defaultRole')->first();
+            $setting = Setting::whereKeyColumn('default_role')->first();
             $defaultRole = Arr::get($setting, 'value_column');
             if ($defaultRole == $obj->name) $isDefault = true;
             $returnNya = [

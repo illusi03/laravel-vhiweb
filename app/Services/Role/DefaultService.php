@@ -19,7 +19,7 @@ class DefaultService extends BaseCurrentService
         if (!$role) {
             return $this->showResponseError('role name has not found');
         }
-        $setting = Setting::whereKeyColumn('defaultRole')->first();
+        $setting = Setting::whereKeyColumn('default_role')->first();
         $setting->value_column = $role->name;
         $setting->save();
         $role->touch();

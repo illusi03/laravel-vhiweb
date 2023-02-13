@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Cooperation\IndexService;
+use App\Services\Photo\IndexService;
 
-class CooperationController extends Controller
+class PhotoController extends Controller
 {
     private $indexService;
 

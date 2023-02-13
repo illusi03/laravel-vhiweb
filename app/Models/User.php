@@ -133,12 +133,12 @@ class User extends Authenticatable
 
     public static function checkExist($credentials)
     {
-        $username = Arr::get($credentials, 'username');
+        $email = Arr::get($credentials, 'email');
         $password = Arr::get($credentials, 'password');
-        $user = self::whereUsername($username)->exists();
+        $user = self::whereEmail($email)->exists();
         if ($user) {
             return [
-                'username' => $username,
+                'email' => $email,
                 'password' => $password
             ];
         } else {

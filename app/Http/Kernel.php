@@ -45,12 +45,12 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:99999999999,1',
+            'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'auth.httponly' => [
             \App\Http\Middleware\AddAuthHeader::class,
-            'throttle:99999999999,1',
+            'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             'auth:api'
         ],

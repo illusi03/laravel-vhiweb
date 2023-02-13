@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->bigInteger('created_by')->nullable()->unsigned();
             $table->bigInteger('updated_by')->nullable()->unsigned();
-            $table->bigInteger('deleter_id')->nullable()->unsigned();
+            $table->bigInteger('deleted_by')->nullable()->unsigned();
         });
     }
 
